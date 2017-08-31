@@ -45,18 +45,21 @@ def make_text(chains):
     key = choice(chains.keys())
     words = [key[0], key[1]]
     char_limit = 0
-    while key in chains and char_limit <= 140:
+
+    while key in chains:
         # Keep looping until we have a key that isn't in the chains
         # (which would mean it was the end of our original text)
         #
         # Note that for long texts (like a full book), this might mean
         # it would run for a very long time.
-
-        word = choice(chains[key])
-        char_limit += len(word)
-        words.append(word)
-        key = (key[1], word)
-
+        if char_limit <= 100:
+            word = choice(chains[key])
+            char_limit += len(word)
+            words.append(word)
+            key = (key[1], word)
+        else:
+            break
+    print char_limit, 'char_limit'
     return " ".join(words)
 
 
@@ -76,7 +79,8 @@ def tweet(chains):
 
     chains = make_text(chains)
     # print chains
-
+    print len(chains), 'len chains'
+    print chains
     status = api.PostUpdate(chains)
 
 
